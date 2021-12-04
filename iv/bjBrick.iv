@@ -1,0 +1,9 @@
+#Inventor V2.0 ascii
+
+Separator {
+    Texture2 {
+	filename "brick.1.rgb"
+    }
+    Cube {
+    }
+}
