@@ -58,7 +58,6 @@ class hCameras:
 
         # Read the object from a file and add to the scene
         myInput = coin.SoInput()
-        # You have to give the file path                                TODO: FIX THE PATH!!!!
         Fiv=os.path.dirname(__file__)+"./iv/parkbench.iv"
         #if not myInput.openFile("E:\\TEMP\\fix some drawing\\Mentor_Freecad\\parkbench.iv"):
         if not myInput.openFile(Fiv):
@@ -74,8 +73,22 @@ class hCameras:
         root.addChild(fileContents)
         
         #Main function 
-        view = Gui.ActiveDocument.ActiveView
-        sg = view.getSceneGraph()
+        #myRenderArea = SoGuiRenderArea(myWindow)
+        myRenderArea = Gui.ActiveDocument.ActiveView
+        # Establish camera positions. 
+        # First do a viewAll on all three cameras.  
+        # Then modify the position of the off-center camera.
+        xymax=myRenderArea.getSize()
+        #print (xymax)
+        myRegion = coin.SbViewportRegion(xymax[0],xymax[1])
+        orthoViewAll.viewAll(root, myRegion)
+        perspViewAll.viewAll(root, myRegion)
+        perspOffCenter.viewAll(root, myRegion)   
+        initialPos = perspOffCenter.position.getValue()
+        x,y,z = initialPos.getValue()
+        perspOffCenter.position = (x+x/2., y+y/2., z+z/4.)  
+        
+        sg = myRenderArea.getSceneGraph()
         sg.addChild(root)
         Gui.SendMsgToActiveView('ViewFit')
     
